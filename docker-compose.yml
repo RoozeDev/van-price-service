@@ -23,3 +23,6 @@ services:
       NODE_ENV: production
     labels:
       - "traefik.http.routers.vanpriceservice.rule=Host(`PlanMyCamper.online`)"
+    deploy:
+      mode: replicated
+      replicas: 3
