@@ -14,8 +14,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  vanpriceservice:
-    image: vanpriceservice
+  van-price-service:
+    image: van-price-service
     build:
       context: .
       dockerfile: ./Dockerfile
