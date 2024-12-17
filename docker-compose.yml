@@ -21,3 +21,5 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
+    labels:
+      - "traefik.http.routers.vanpriceservice.rule=Host(`PlanMyCamper.online`)"
