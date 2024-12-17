@@ -2,15 +2,15 @@ version: '3.4'
 
 services:
   reverse-proxy:
-    image: traefic:v3.1
+    image: traefik:v3.1
     command:
-      - "--api-insecure:=true"
+      - "--api.insecure=true"
       - "--providers.docker"
     ports:
       # The HTTP Port
       - "80:80"
-      # The application port
-      - "3000:3000"
+      # The Web UI
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
