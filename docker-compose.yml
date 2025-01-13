@@ -1,5 +1,10 @@
 version: '3.4'
 
+volumes:
+  van-price-service-data:
+    name: "van-price-service-data"
+    external: true
+
 services:
   reverse-proxy:
     image: traefik:v3.1
@@ -26,3 +31,14 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - van-price-service-data:/data/db
+    ports:
+      - 27017:27017
