@@ -1,9 +1,13 @@
-// In this file you can configure migrate-mongo
+const fs = require('fs');
+const path = require('path');
+
+// Read the connection URL from the secrets file
+const mongoUrl = fs.readFileSync(path.join(__dirname, '/secrets/db_connection_string.txt'), 'utf8').trim();
 
 const config = {
   mongodb: {
     // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb://localhost:27017",
+    url: mongoUrl,
 
     // TODO Change this to your database name:
     databaseName: "van-price-service",

@@ -31,14 +31,27 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+    secrets:
+      - db_connection_string
 
   mongo:
     image: mongo
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/db_root_username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     volumes:
       - van-price-service-data:/data/db
     ports:
       - 27017:27017
+    secrets:
+      - db_root_username
+      - db_root_password
+
+secrets:
+  db_connection_string:
+    file: secrets/db_connection_string.txt
+  db_root_username:
+    file: secrets/db_root_username.txt
+  db_root_password:
+    file: secrets/db_root_password.txt
