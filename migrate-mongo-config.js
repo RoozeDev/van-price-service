@@ -2,7 +2,14 @@ const fs = require('fs');
 const path = require('path');
 
 // Read the connection URL from the secrets file
-const mongoUrl = fs.readFileSync(path.join(__dirname, '/secrets/db_connection_string.txt'), 'utf8').trim();
+var mongoUrl
+try {
+  mongoUrl = fs.readFileSync('/run/secrets/db_connection_string', 'utf8').trim();
+}
+catch {
+  print("Could not get the mongoURL from the secrets file. This only works migrate-mongo is running in a container.")
+  print("Not an issue if you are only creating a migration")
+}
 
 const config = {
   mongodb: {

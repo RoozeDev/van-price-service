@@ -5,6 +5,11 @@ volumes:
     name: "van-price-service-data"
     external: true
 
+networks:
+  van-price-service-network:
+    name: "van-price-service-network"
+    external: true
+
 services:
   reverse-proxy:
     image: traefik:v3.1
@@ -35,8 +40,12 @@ services:
     depends_on:
       mongo:
         condition: service_healthy
+    networks:
+      - van-price-service-network
     secrets:
       - db_connection_string
+      - db_service_user_name
+      - db_service_user_password
 
   mongo:
     image: mongo
@@ -46,16 +55,24 @@ services:
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     volumes:
       - van-price-service-data:/data/db
-    ports:
-      - 127.0.0.1:27017:27017
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+    networks:
+      - van-price-service-network
     secrets:
       - db_root_username
       - db_root_password
+      - db_service_user_name
+      - db_service_user_password
 
 secrets:
   db_connection_string:
-    file: secrets/db_connection_string.txt
+    file: run/secrets/db_connection_string
   db_root_username:
-    file: secrets/db_root_username.txt
+    file: run/secrets/db_root_username
   db_root_password:
-    file: secrets/db_root_password.txt
+    file: run/secrets/db_root_password
+  db_service_user_name:
+    file: run/secrets/db_service_user_name
+  db_service_user_password:
+    file: run/secrets/db_service_user_password
