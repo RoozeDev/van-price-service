@@ -7,8 +7,8 @@ try {
   mongoUrl = fs.readFileSync('/run/secrets/db_connection_string', 'utf8').trim();
 }
 catch {
-  print("Could not get the mongoURL from the secrets file. This only works migrate-mongo is running in a container.")
-  print("Not an issue if you are only creating a migration")
+  console.log("Could not get the mongoURL from the secrets file. This only works migrate-mongo is running in a container.")
+  console.log("Not an issue if you are only creating a migration")
 }
 
 const config = {
