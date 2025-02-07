@@ -31,6 +31,10 @@ services:
     deploy:
       mode: replicated
       replicas: 3
+    #Ensure mongo always starts first
+    depends_on:
+      mongo:
+        condition: service_healthy
     secrets:
       - db_connection_string
 
