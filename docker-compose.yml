@@ -4,6 +4,9 @@ volumes:
   van-price-service-data:
     name: "van-price-service-data"
     external: true
+  van-price-service-ui:
+    name: "van-price-service-ui"
+    external: true
 
 networks:
   van-price-service-network:
@@ -23,6 +26,8 @@ services:
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - van-price-service-network
 
   van-price-service:
     image: van-price-service
@@ -33,10 +38,11 @@ services:
       NODE_ENV: production
     labels:
       - "traefik.http.routers.vanpriceservice.rule=Host(`PlanMyCamper.online`)"
+      - "traefik.http.routers.vanpriceservice.rule=PathPrefix(`/api`)"
     deploy:
       mode: replicated
       replicas: 3
-    #Ensure mongo always starts first
+    # Ensure mongo always starts first
     depends_on:
       mongo:
         condition: service_healthy
@@ -46,6 +52,16 @@ services:
       - db_connection_string
       - db_service_user_name
       - db_service_user_password
+
+  van-price-frontend:
+    image: nginx:alpine # Or another static server
+    volumes:
+      - van-price-service-ui:/usr/share/nginx/html
+    labels:
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+    networks:
+      - van-price-service-network
 
   mongo:
     image: mongo
