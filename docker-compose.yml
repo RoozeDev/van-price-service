@@ -54,7 +54,8 @@ services:
       - db_service_user_password
 
   van-price-frontend:
-    image: nginx:alpine # Or another static server
+    image: nginx:alpine
+    # van-price-ui repo will put the correct files in to the van-price-service-ui volume
     volumes:
       - van-price-service-ui:/usr/share/nginx/html
     labels:
