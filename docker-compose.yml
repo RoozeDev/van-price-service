@@ -52,6 +52,7 @@ services:
       - db_connection_string
       - db_service_user_name
       - db_service_user_password
+      - db_name
 
   van-price-frontend:
     image: nginx:alpine
@@ -95,3 +96,5 @@ secrets:
     file: run/secrets/db_service_user_name
   db_service_user_password:
     file: run/secrets/db_service_user_password
+  db_name:
+    file: run/secrets/db_name
